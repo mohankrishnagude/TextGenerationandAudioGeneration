@@ -2,3 +2,4 @@ pytesseract
 gtts
 tesseract
 Pillow
+google-cloud-vision
