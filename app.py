@@ -52,12 +52,7 @@ st.write("Upload an image to extract text, convert it to audio, and download the
 
 # Sidebar instructions
 st.sidebar.title("How to Use:")
-st.sidebar.write("""
-1. Upload an image containing text.
-2. Extract the text.
-3. Convert the extracted text to an audio file.
-4. Download the text or audio.
-""")
+st.sidebar.write("""1. Upload an image containing text. 2. Extract the text. 3. Convert the extracted text to an audio file. 4. Download the text or audio.""")
 
 # File uploader for the image
 uploaded_file = st.file_uploader("🖼️ Choose an image file...", type=["png", "jpg", "jpeg"])
@@ -76,7 +71,7 @@ if uploaded_file is not None:
         if text.strip():
             st.success("Text successfully extracted!")
             st.text_area("📜 Extracted Text (for copy):", text, height=150)
-            
+
             # Provide options to download the text as a file
             st.download_button(
                 label="💾 Download Extracted Text",
@@ -109,7 +104,4 @@ else:
     st.info("👈 Upload an image file from your Device to get started.")
 
 # Footer with contact details
-st.markdown("""
-    ---
-    Made by Gude Venkata Mohana Krishna
-""")
+st.markdown("""--- Made by Gude Venkata Mohana Krishna""")
