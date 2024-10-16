@@ -3,7 +3,11 @@ from PIL import Image
 import pytesseract
 from gtts import gTTS
 import os
+
+# Set the path for Tesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+# Streamlit UI styling
 st.markdown("""
     <style>
     body {
@@ -66,24 +70,23 @@ if uploaded_file is not None:
 
     # Perform OCR using pytesseract
     st.write("🔍 **Extracting Text from Image...**")
-    text = pytesseract.image_to_string(image)
-    
-    # Display extracted text in a text area
-    if text.strip() != "":
-        st.success("Text successfully extracted!")
-        st.text_area("📜 Extracted Text (for copy):", text, height=150)
+    try:
+        text = pytesseract.image_to_string(image)
         
-        # Provide options to download the text as a file
-        st.download_button(
-            label="💾 Download Extracted Text",
-            data=text,
-            file_name="extracted_text.txt",
-            mime="text/plain"
-        )
+        if text.strip():
+            st.success("Text successfully extracted!")
+            st.text_area("📜 Extracted Text (for copy):", text, height=150)
+            
+            # Provide options to download the text as a file
+            st.download_button(
+                label="💾 Download Extracted Text",
+                data=text,
+                file_name="extracted_text.txt",
+                mime="text/plain"
+            )
 
-        # Text-to-speech conversion using gTTS
-        if st.button("🎤 Convert Text to Audio"):
-            if text:
+            # Text-to-speech conversion using gTTS
+            if st.button("🎤 Convert Text to Audio"):
                 tts = gTTS(text=text, lang='en')
                 tts.save("extracted_audio.mp3")
                 audio_file = open("extracted_audio.mp3", "rb").read()
@@ -96,9 +99,12 @@ if uploaded_file is not None:
                     file_name="extracted_audio.mp3",
                     mime="audio/mp3"
                 )
-    else:
-        st.error("No text could be extracted from the image. Please try another image.")
-
+        else:
+            st.error("No text could be extracted from the image. Please try another image.")
+    except pytesseract.pytesseract.TesseractNotFoundError:
+        st.error("Tesseract OCR not found. Please ensure it is installed and the path is set correctly.")
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
 else:
     st.info("👈 Upload an image file from your Device to get started.")
 
